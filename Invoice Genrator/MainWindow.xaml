@@ -1,0 +1,247 @@
+﻿<Window x:Class="Invoice_Genrator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Invoice_Genrator"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        Activated="Window_Activated"
+        Title="Invoice Genrator" Height="450" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <TabControl>
+
+            <TabItem Header="Create Invoice">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Orientation="Vertical" >
+
+                    <!-- Invoive and Date-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  Margin="50,30,50,0">
+                        <TextBlock TextWrapping="Wrap" Text="Invoice Number  "/>
+                        <TextBlock x:Name="TextBlock_Invoice" TextWrapping="Wrap"   Margin="5,0,0,0" FontWeight="Bold"/>
+                        <TextBlock TextWrapping="Wrap" Text="Date  " Margin="300,0,0,0" HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="TextBlock_InvoiceDate"  Text="DD/MM/YYYY" Margin="5,0,0,0" FontWeight="Bold" HorizontalAlignment="Right" Width="98"/>
+                    </StackPanel>
+
+                    <!-- Name and Address-->
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="50,10" Background="LightGray">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock TextWrapping="Wrap" Text="Client Name  " Width="80" TextAlignment="Right"/>
+                            <TextBox x:Name="TBx_clientName" TextWrapping="Wrap"   Margin="5,0,0,0" Width="590" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <TextBlock TextWrapping="Wrap" Text="Client Address" HorizontalAlignment="Right" Width="80"/>
+                            <TextBox x:Name="TBx_clientAddress" TextWrapping="Wrap"   Margin="5,0,0,0" Width="590"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0" Width="577">
+                            <TextBlock TextWrapping="Wrap" Text="Postal code" HorizontalAlignment="Right" Width="70"/>
+                            <TextBox x:Name="TBx_postalCode" TextWrapping="Wrap"  Text="" Margin="5,0,0,0" Width="94" TextChanged="NumberValidation"/>
+                            <TextBlock TextWrapping="Wrap" Text="city" HorizontalAlignment="Right" Width="29" Margin="100,0,0,0"/>
+                            <TextBox x:Name="TBx_City" TextWrapping="Wrap"  Text="" Margin="0,0,0,0" Width="99"/>
+                        </StackPanel>
+
+
+                    </StackPanel>
+                    <StackPanel>
+                        <!--  Add items-->
+
+
+                        <StackPanel Orientation="Horizontal" Margin="50,10" HorizontalAlignment="Stretch"  >
+
+                            <TextBlock TextWrapping="Wrap" Text="Product Name" HorizontalAlignment="Right" Width="90"/>
+                            <TextBox x:Name="TBx_description" TextWrapping="Wrap"  Text="" Margin="5,0,0,0" Width="61"/>
+                            <TextBlock TextWrapping="Wrap" Text="Price" HorizontalAlignment="Right" Width="33" Margin="30,0,0,0" RenderTransformOrigin="1.303,0.45"/>
+                            <TextBox x:Name="TBx_price" TextWrapping="Wrap"  Text="" Margin="0,0,0,0" Width="60" TextChanged="NumberValidation"/>
+                            <TextBlock TextWrapping="Wrap" Text="Quantity" HorizontalAlignment="Right" Width="57" Margin="30,0,0,0"/>
+                            <TextBox x:Name="TBx_quantity" TextWrapping="Wrap"  Text="" Margin="0,0,0,0" Width="60" TextChanged="NumberValidation"/>
+                            <Button x:Name="BTn_addItem" Content="Add Product"  Width="95" Margin=" 30,0,0,0" Click="BTn_addItem_Click" ToolTip="Add Item Into Cart"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                    <!-- item table-->
+                    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal" Margin="50,0,50,0"  Height="100">
+
+                        <DataGrid  x:Name="DG_itemDetails" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="684" CanUserResizeRows="False" ColumnWidth="170">
+
+                            <DataGrid.Columns>
+
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+
+                    <!-- total-->
+                    <StackPanel HorizontalAlignment="right" VerticalAlignment="Stretch" Margin="0,10,50,10" Orientation="Horizontal" Height="16" Width="120">
+
+                        <TextBlock Text="Gross Total"/>
+
+
+                        <TextBlock x:Name="TextBlock_grossTotal" Text="00.00" Margin="10,0,0,0"/>
+
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="50,5,50,0" HorizontalAlignment="Stretch">
+                        <Button Content="Delete Product" Width="104" HorizontalAlignment="Left" Click="Button_Click" ToolTip="Click to remove the product from Item List"/>
+                        <Button x:Name="BTn_submit" Content="Save" HorizontalAlignment="Right" Width="50" Margin="520,0,50,0" Click="BTn_submit_Click" RenderTransformOrigin="5.12,0.4" />
+
+                    </StackPanel>
+                </StackPanel>
+
+
+            </TabItem>
+
+            <!--Invoice History Tab-->
+            <TabItem Header="Invoice History">
+                <Grid Margin="10,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="184*"/>
+                        <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="545*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Search Box and List of Invoice History-->
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Orientation="Vertical">
+                        <TextBlock Height="30"  Text="Enter the Client Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                        <TextBox x:Name="TBx_searchInvoice" Height="23"  Text="" HorizontalContentAlignment="Center" TextChanged="TBx_searchInvoice_TextChanged"/>
+                        <ListBox x:Name="LBx_invoiceList" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10,0,0" DisplayMemberPath="ClientName" Height="200"/>
+
+                    </StackPanel>
+
+                    <Grid  Grid.Column="2" Margin="50,30,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" DataContext="{ Binding ElementName=LBx_invoiceList, Path=SelectedItem}">
+                        <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Stretch">
+                            <Grid HorizontalAlignment="Stretch" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Invoice Number" Grid.Column="0" Grid.Row="0" TextAlignment="Right" />
+                                <TextBlock x:Name="TextBlock_invoiceNo" Text="{Binding InvoiceNumber}" Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" />
+                                <TextBlock Text=" Invoice Date" Grid.Column="0" Grid.Row="1" Margin="10,10,0,0"  TextAlignment="Right"/>
+                                <TextBlock x:Name="TextBlock_date" Text="{Binding InvoiceDate}" Grid.Column="1" Grid.Row="1" Margin="10,10,0,0" />
+
+                                <TextBlock Text="Client Name" Grid.Column="0" Grid.Row="2" TextAlignment="Right"  Margin="10,10,0,0"/>
+                                <TextBlock x:Name="TextBlock_clientName" Text="{Binding ClientName}" Grid.Column="1" Grid.Row="2" Margin="10,10,0,0" />
+
+                                <TextBlock Text="Client Address" Grid.Column="0" Grid.Row="3" TextAlignment="Right"  Margin="10,10,0,0"/>
+                                <TextBlock x:Name="TextBlock_address" Text="{Binding ClientAddress }" Grid.Column="1" Grid.Row="3" Margin="10,10,0,0" />
+
+                                <TextBlock Text="Total Amount" Grid.Column="0" Grid.Row="4" TextAlignment="Right"  Margin="10,10,0,0"/>
+                                <TextBlock x:Name="TextBlock_totalAmount" Text="{Binding grossAmount}" Grid.Column="1" Grid.Row="4" Margin="10,10,0,0" />
+
+
+                            </Grid>
+
+                        </StackPanel>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!--client info Tab-->
+
+            <TabItem Header="Client Information">
+                <Grid Margin="10,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Search Box and List of Clients-->
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Orientation="Vertical">
+                        <TextBlock Height="30"  Text="Enter the Client Name" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                        <TextBox x:Name="TBx_searchClient" Height="23"  Text="" HorizontalContentAlignment="Center"/>
+                        <ListBox x:Name="LBx_clientList" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10,0,0" Height="200" DisplayMemberPath="ClientName"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button Content="Add" Width="50" HorizontalAlignment="Right" Margin="0,0,18,0" ToolTip="Click to Add new client" Foreground="Green" Click="BTn_add_client"/>
+                            <Button Content="Delete" Width="50" HorizontalAlignment="Right" ToolTip="Click to Remove the client" Foreground="Red" Click="BTn_remove_client" Margin="0,0,0,0"/>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--detail of client-->
+
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Stretch">
+
+                        <Grid DataContext="{ Binding ElementName=LBx_clientList, Path=SelectedItem}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Client Name" Grid.Column="0" Grid.Row="0" TextAlignment="Right" Margin="0,10,0,0"/>
+                            <TextBox Text="{Binding ClientName}"  Grid.Column="1" Grid.Row="0" Margin="5,10,-183,0"/>
+
+                            <TextBlock Text="Client Address" Grid.Column="0" Grid.Row="1" TextAlignment="Right" Margin="0,10,0,0"/>
+                            <TextBox x:Name="TBx_clientaddressInfo" Text="{Binding ClientAddress}" Grid.Column="1" Grid.Row="1" Margin="5,10,-183,0"/>
+
+                            <TextBlock Text="Postal Code" Grid.Column="0" Grid.Row="2" TextAlignment="Right" Margin="0,10,0,0"/>
+                            <TextBox x:Name="TBx_clinetPostalCodeInfo" Text="{Binding ClientPostal}" Grid.Column="1" Grid.Row="2" Margin="5,10,-183,0" TextChanged="NumberValidation"/>
+
+                            <TextBlock Text="City" Grid.Column="0" Grid.Row="3" TextAlignment="Right" Margin="0,10,0,0"/>
+                            <TextBox x:Name="clinetCityInfo" Text="{Binding ClientCity}" Grid.Column="1" Grid.Row="3" Margin="5,10,-183,0"/>
+
+                            <Button x:Name="BTn_clientInfoUpdate" Content="Update" Width="81" Margin="50,30,0,0" Click="BTn_clientInfoUpdate_Click" />
+                        </Grid>
+
+                    </StackPanel>
+                </Grid>
+
+            </TabItem>
+            <!--Company Profile Tab-->
+
+            <TabItem Header="Company Profile">
+                <Grid>
+                    <Grid HorizontalAlignment="Center" Margin="100,30"  VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Company Name" Grid.Column="0" Grid.Row="0" Margin="0,10,0,0"/>
+                        <TextBox x:Name="TBx_companyName" FontSize="14" Text=" Company Name" Grid.Column="1" Margin="0,10,0,0" Grid.Row="0"/>
+
+                        <TextBlock Text="Company Address" Grid.Column="0" Grid.Row="1" Margin="0,10,0,0"/>
+                        <TextBox x:Name="TBx_companyAddress" FontSize="14" Text=" Address" Grid.Column="1" Grid.Row="1" Margin="0,10,0,0"/>
+
+                        <TextBlock Text="Email" Grid.Column="0" Grid.Row="2" Margin="0,10,0,0"/>
+                        <TextBox x:Name="TBx_companyEmail" FontSize="14" Text=" Email" Grid.Column="1" Grid.Row="2" Margin="0,10,0,0" />
+
+                        <TextBlock Text="Contact Number" Grid.Column="0" Grid.Row="3" Margin="0,10,0,0"/>
+                        <TextBox x:Name="TBx_contact" FontSize="14" Text=" Contact Number" Grid.Column="1" Grid.Row="3" Margin="0,10,0,0" />
+
+
+                    </Grid>
+                    <Button x:Name="BTn_updateCompanyInfo" Content="Update" Width="80" Height="20" Click="BTn_updateCompanyInfo_Click"   />
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
